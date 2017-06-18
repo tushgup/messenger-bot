@@ -72,5 +72,5 @@ var port = conf.PORT;
 // });
 
 httpServer.listen(port, function () {
-    console.log('Express server listening on %d, in %s mode', port, app.get('env'));
+    console.log('Express server listening - %d, in %s mode', port, app.get('env'));
 });
