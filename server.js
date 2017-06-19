@@ -128,7 +128,9 @@ function receivedMessage(event) {
 function sendMessage(recipientId, message) {
 
     var finalObject = {};
-    finalObject.recipient.id = recipientId;
+    var recieient = {};
+    recieient.id = recipientId;
+    finalObject.recipient = recieient;
     finalObject.message = message;
 
     console.log("Sesning message now");
