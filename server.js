@@ -229,11 +229,16 @@ function receivedPostback(event) {
                         singleProduct.title = DOTDResult.products[i].title;
                         singleProduct.subtitle = DOTDResult.products[i].offerPrice;
                         singleProduct.image_url = DOTDResult.products[i].imageLink;
-                        singleProduct.buttons = [{
-                            type: "web_url",
-                            url: DOTDResult.products[i].link,
-                            title: "View Product"
-                        }];
+
+                        var buttonArray = [];
+                        var button = {};
+                        button.type = "web_url";
+                        button.url = DOTDResult.products[i].link;
+                        button.title = "View Product";
+
+                        buttonArray.push(button);
+
+                        singleProduct.buttons = buttonArray;
                         arrayOfProducts.push(singleProduct);
                         console.log(singleProduct);
                     }
