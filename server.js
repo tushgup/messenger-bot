@@ -134,7 +134,7 @@ function sendMessage(recipientId, message) {
     finalObject.message = message;
 
     console.log("Sesning message now");
-    console.info(finalObject);
+    console.dir(finalObject);
 
     request({
         url: "https://graph.facebook.com/v2.6/me/messages",
