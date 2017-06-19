@@ -66,7 +66,7 @@ function sendMessage(receiver, data, isText) {
     });
 }
 
-var port = conf.PORT;
+var port = process.env.PORT || 8000;
 httpServer.listen(port, function () {
     console.log("Express http server listening on port " + port);
 });
