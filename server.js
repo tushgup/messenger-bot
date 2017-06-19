@@ -180,12 +180,13 @@ function receivedPostback(event) {
                     }
 
                 }
-                var message = greeting + "Shoppingo helps you find the best deals on your favourite prouducts while shopping online!";
+                var message = greeting + " Shoppingo helps you find the best deals on your favourite prouducts while shopping online!";
                 sendMessage(senderID, {text: message});
             });
     }
     else if (payload === "DOTD_PAYLOAD") {
         console.log("DOTD was clicked");
+
         getDOTD(senderID);
     }
     else {
@@ -211,7 +212,10 @@ function receivedPostback(event) {
                 }
                 else
                 {
+
                     var DOTDResult = JSON.parse(body);
+                    console.log("Got the JSON.");
+                    console.log(DOTDResult.title);
                     var message =
                         {
                             attachment: {
@@ -231,7 +235,7 @@ function receivedPostback(event) {
                                 }
                             }
                         };
-                    sendMessage(recipientID, message);
+                    sendMessage(recipientID, {text: message});
                 }
             });
         }
