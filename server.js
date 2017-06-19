@@ -16,7 +16,7 @@ var httpServer = http.createServer(app);
 app.get('/', function (req, res, next) {
   res.send('Welcome to the Shoppingo Facebook Messenger Bot. This is root endpoint');
 });
-
+/*
 app.get('/webhook/', handleVerify);
 app.post('/webhook/', receiveMessage);
 
@@ -39,6 +39,18 @@ function receiveMessage(req, res, next) {
     });
     res.sendStatus(200);
 }
+*/
+
+app.get('/webhook', function(req, res) {
+    if (req.query['hub.mode'] === 'subscribe' &&
+        req.query['hub.verify_token'] === conf.VERIFY_TOKEN) {
+        console.log("Validating webhook");
+        res.status(200).send(req.query['hub.challenge']);
+    } else {
+        console.error("Failed validation. Make sure the validation tokens match.");
+        res.sendStatus(403);
+    }
+});
 
 function sendMessage(receiver, data, isText) {
     var payload = {};
