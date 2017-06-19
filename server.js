@@ -185,8 +185,8 @@ function receivedPostback(event) {
             });
     }
     else if (payload === "DOTD_PAYLOAD") {
+        console.log("DOTD was clicked");
         getDOTD(senderID);
-
     }
     else {
         console.log("Received postback for user %d and page %d with payload '%s'", senderID, recipientID, payload);
@@ -212,8 +212,7 @@ function receivedPostback(event) {
                 else
                 {
                     var DOTDResult = JSON.parse(body);
-                    var message = [];
-                    message =
+                    var message =
                         {
                             attachment: {
                                 type: "template",
