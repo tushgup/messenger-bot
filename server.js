@@ -126,14 +126,19 @@ function receivedMessage(event) {
 
 
 function sendMessage(recipientId, message) {
+
+    var finalObject = {};
+    finalObject.recipient.id = recipientId;
+    finalObject.message = message;
+
+    console.log("Sesning message now");
+    console.info(finalObject);
+
     request({
         url: "https://graph.facebook.com/v2.6/me/messages",
         qs: {access_token: conf.PROFILE_TOKEN},
         method: "POST",
-        json: {
-            recipient: {id: recipientId},
-            message: JSON.stringify(message)
-        }
+        json: finalObject
     }, function(error, response, body) {
         if (error) {
             console.log("Error sending message: " + response.error);
