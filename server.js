@@ -115,48 +115,32 @@ function receivedMessage(event) {
                 break;
 
             default:
-                sendTextMessage(senderID, messageText);
+                sendMessage(senderID, messageText);
         }
     } else if (messageAttachments) {
-        sendTextMessage(senderID, "Message with attachment received");
+        sendMessage(senderID, "Message with attachment received");
     }
 }
 
 
-function sendTextMessage(recipientId, messageText)
 
-    var messageData = {
-        recipient: {
-            id: recipientId
-        },
-        message: {
-            text: messageText
-        }
-    };
 
-    callSendAPI(messageData);
-}
-
-function callSendAPI(messageData) {
+function sendMessage(recipientId, message) {
     request({
-        uri: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: { access_token: conf.PROFILE_TOKEN },
-        method: 'POST',
-        json: messageData
-
-    }, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            var recipientId = body.recipient_id;
-            var messageId = body.message_id;
-            console.log("Successfully sent generic message with id %s to recipient %s",
-                messageId, recipientId);
-        } else {
-            console.error("Unable to send message.");
-            console.error(response);
-            console.error(error);
+        url: "https://graph.facebook.com/v2.6/me/messages",
+        qs: {access_token: conf.PROFILE_TOKEN},
+        method: "POST",
+        json: {
+            recipient: {id: recipientId},
+            message: message,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log("Error sending message: " + response.error);
         }
     });
 }
+
 
 function receivedPostback(event) {
     var senderID = event.sender.id;
@@ -187,7 +171,7 @@ function receivedPostback(event) {
                 greeting = "Hey, " + name + ".";
             }
             var message = greeting + "Shoppingo helps you find the best deals on your favourite prouducts while shopping online!";
-            sendTextMessage(senderID, {text: message});
+            sendMessage(senderID, {text: message});
         });
     }
     else
@@ -196,7 +180,7 @@ function receivedPostback(event) {
 
         // When a postback is called, we'll send a message back to the sender to
         // let them know it was successful
-        sendTextMessage(senderID, "Postback called");
+        sendMessage(senderID, "Postback called");
     }
 
 
