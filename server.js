@@ -154,7 +154,7 @@ function receivedPostback(event) {
     if (payload === "GET_STARTED_PAYLOAD") {
         request({
             url: "https://graph.facebook.com/v2.6" + senderID,
-            qs {
+            qs: {
                 access_token: conf.PROFILE_TOKEN;
         fields: "first_name"
     },
