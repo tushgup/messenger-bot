@@ -233,6 +233,7 @@ function receivedPostback(event) {
                                 }
                             }
                         };
+                    console.log(message);
                     sendMessage(recipientID, {text: message});
                 }
             });
