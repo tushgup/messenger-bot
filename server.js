@@ -214,22 +214,32 @@ function receivedPostback(event) {
 
                     var DOTDResult = JSON.parse(body);
                     console.log(DOTDResult.products[0].title)
+
+                    var arrayOfProducts = [];
+
+                    for(var i=0; i<5; i++){
+                        var singleProduct = {};
+                        singleProduct.title = DOTDResult.products[i].title;
+                        singleProduct.subtitle = DOTDResult.products[i].offerPrice;
+                        singleProduct.image_url = DOTDResult.products[i].imageLink;
+                        singleProduct.buttons = [{
+                            type: "web_url",
+                            url: DOTDResult.products[i].link,
+                            title: "View Product"
+                        }];
+                        arrayOfProducts.push(singleProduct);
+                        console.log(singleProduct);
+                    }
+
+                    console.log(arrayOfProducts);
+
                     var message =
                         {
                             attachment: {
                                 type: "template",
                                 payload: {
                                     template_type: "generic",
-                                    elements: [{
-                                        title: DOTDResult.products[0].title,
-                                        subtitle: DOTDResult.products[0].offerPrice,
-                                        image_url: DOTDResult.products[0].imageLink,
-                                        buttons: [{
-                                            type: "web_url",
-                                            url: DOTDResult.products[0].link,
-                                            title: "View Product"
-                                        }]
-                                    }]
+                                    elements: arrayOfProducts;
                                 }
                             }
                         };
