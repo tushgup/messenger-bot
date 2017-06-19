@@ -213,7 +213,7 @@ function receivedPostback(event) {
                 {
 
                     var DOTDResult = JSON.parse(body);
-                    console.log(DOTDResult.products[0].title);
+                    console.log(DOTDResult.products[0].title)
                     var message =
                         {
                             attachment: {
@@ -228,7 +228,7 @@ function receivedPostback(event) {
                                             type: "web_url",
                                             url: DOTDResult.products[0].link,
                                             title: "View Product"
-                                        }],
+                                        }]
                                     }]
                                 }
                             }
