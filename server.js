@@ -239,7 +239,7 @@ function receivedPostback(event) {
                                 type: "template",
                                 payload: {
                                     template_type: "generic",
-                                    elements: arrayOfProducts;
+                                    elements: arrayOfProducts
                                 }
                             }
                         };
