@@ -16,6 +16,30 @@ var httpServer = http.createServer(app);
 app.get('/', function (req, res, next) {
   res.send('Welcome to the Shoppingo Facebook Messenger Bot. This is root endpoint');
 });
+/*
+app.get('/webhook/', handleVerify);
+app.post('/webhook/', receiveMessage);
+
+function handleVerify(req, res, next) {
+    var token = process.env.VERIFY_TOKEN || conf.VERIFY_TOKEN;
+    if (req.query['hub.verify_token'] === token) {
+        return res.send(req.query['hub.challenge']);
+    }
+    res.send('Validation failed, Verify token mismatch');
+}
+
+function receiveMessage(req, res, next) {
+    var message_instances = req.body.entry[0].messaging;
+    message_instances.forEach(function(instance){
+        var sender = instance.sender.id;
+        if(instance.message && instance.message.text) {
+            var msg_text = instance.message.text;
+            sendMessage(sender, msg_text, true);
+        }
+    });
+    res.sendStatus(200);
+}
+*/
 
 app.get('/webhook', function(req, res) {
     if (req.query['hub.mode'] === 'subscribe' &&
@@ -48,6 +72,9 @@ app.post('/webhook', function (req, res) {
                 else if (event.postback) {
                     receivedPostback(event);
                 }
+
+
+
                 else {
                     console.log("Webhook received unknown event: ", event);
                 }
@@ -84,7 +111,7 @@ function receivedMessage(event) {
         // and send back the example. Otherwise, just echo the text we received.
         switch (messageText) {
             case 'generic':
-                console.log("Recvd. Generic");
+                sendGenericMessage(senderID);
                 break;
 
             default:
