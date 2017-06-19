@@ -186,7 +186,6 @@ function receivedPostback(event) {
     }
     else if (payload === "DOTD_PAYLOAD") {
         console.log("DOTD was clicked");
-
         getDOTD(senderID);
     }
     else {
@@ -214,8 +213,7 @@ function receivedPostback(event) {
                 {
 
                     var DOTDResult = JSON.parse(body);
-                    console.log("Got the JSON.");
-                    console.log(DOTDResult.title);
+                    console.log(DOTDResult);
                     var message =
                         {
                             attachment: {
