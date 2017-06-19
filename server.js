@@ -251,7 +251,9 @@ function receivedPostback(event) {
                             }
                         };
                     console.log(message);
-                    sendMessage(recipientID, {text: message});
+                    var funalObject = {};
+                    funalObject.text = message;
+                    sendMessage(recipientID, funalObject);
                 }
             });
         }
