@@ -122,54 +122,9 @@ function receivedMessage(event) {
     }
 }
 
-function sendGenericMessage(recipientId) {
-    var messageData = {
-        recipient: {
-            id: recipientId
-        },
-        message: {
-            attachment: {
-                type: "template",
-                payload: {
-                    template_type: "generic",
-                    elements: [{
-                        title: "rift",
-                        subtitle: "Next-generation virtual reality",
-                        item_url: "https://www.oculus.com/en-us/rift/",
-                        image_url: "http://messengerdemo.parseapp.com/img/rift.png",
-                        buttons: [{
-                            type: "web_url",
-                            url: "https://www.oculus.com/en-us/rift/",
-                            title: "Open Web URL"
-                        }, {
-                            type: "postback",
-                            title: "Call Postback",
-                            payload: "Payload for first bubble",
-                        }],
-                    }, {
-                        title: "touch",
-                        subtitle: "Your Hands, Now in VR",
-                        item_url: "https://www.oculus.com/en-us/touch/",
-                        image_url: "http://messengerdemo.parseapp.com/img/touch.png",
-                        buttons: [{
-                            type: "web_url",
-                            url: "https://www.oculus.com/en-us/touch/",
-                            title: "Open Web URL"
-                        }, {
-                            type: "postback",
-                            title: "Call Postback",
-                            payload: "Payload for second bubble",
-                        }]
-                    }]
-                }
-            }
-        }
-    };
 
-    callSendAPI(messageData);
-}
+function sendTextMessage(recipientId, messageText)
 
-function sendTextMessage(recipientId, messageText) {
     var messageData = {
         recipient: {
             id: recipientId
@@ -193,7 +148,6 @@ function callSendAPI(messageData) {
         if (!error && response.statusCode == 200) {
             var recipientId = body.recipient_id;
             var messageId = body.message_id;
-
             console.log("Successfully sent generic message with id %s to recipient %s",
                 messageId, recipientId);
         } else {
@@ -206,19 +160,46 @@ function callSendAPI(messageData) {
 
 function receivedPostback(event) {
     var senderID = event.sender.id;
+
     var recipientID = event.recipient.id;
-    var timeOfPostback = event.timestamp;
 
     // The 'payload' param is a developer-defined field which is set in a postback
     // button for Structured Messages.
     var payload = event.postback.payload;
 
-    console.log("Received postback for user %d and page %d with payload '%s' " +
-        "at %d", senderID, recipientID, payload, timeOfPostback);
+    if (payload === "GET_STARTED_PAYLOAD") {
+        request({
+            url: "https://graph.facebook.com/v2.6" + senderID,
+            qs {
+                access_token: conf.PROFILE_TOKEN;
+        fields: "first_name"
+    },
+        method: "GET"
+    },
+        function (error, response, body) {
+            var greeting = "";
+            if (error) {
+                console.log("Error getting username " + error);
+            }
+            else {
+                var bodyObj = JSON.parse(body);
+                name = bodyObj.first_name;
+                greeting = "Hey, " + name + ".";
+            }
+            var message = greeting + "Shoppingo helps you find the best deals on your favourite prouducts while shopping online!";
+            sendTextMessage(senderID, {text: message});
+        });
+    }
+    else
+    {
+        console.log("Received postback for user %d and page %d with payload '%s'", senderID, recipientID, payload);
 
-    // When a postback is called, we'll send a message back to the sender to
-    // let them know it was successful
-    sendTextMessage(senderID, "Postback called");
+        // When a postback is called, we'll send a message back to the sender to
+        // let them know it was successful
+        sendTextMessage(senderID, "Postback called");
+    }
+
+
 }
 
 var port = process.env.PORT || 8000;
