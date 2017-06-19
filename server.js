@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 var httpServer = http.createServer(app);
 
-app.get('/', function (req, res, next) {
+app.get('/', function (req, res) {
   res.send('Welcome to the Shoppingo Facebook Messenger Bot. This is root endpoint');
 });
 /*
@@ -201,8 +201,6 @@ function receivedPostback(event) {
 
 
 }
-
-var port = process.env.PORT || 8000;
-httpServer.listen(port, function () {
-    console.log("Express http server listening on port " + port);
+httpServer.listen(conf.PORT, function () {
+    console.log("Express http server listening on port " + conf.PORT);
 });
