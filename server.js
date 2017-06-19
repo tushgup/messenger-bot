@@ -138,6 +138,10 @@ function sendMessage(recipientId, message) {
         if (error) {
             console.log("Error sending message: " + response.error);
         }
+        else
+        {
+            console.log("Succesfully sent message.");
+        }
     });
 }
 
@@ -153,38 +157,89 @@ function receivedPostback(event) {
 
     if (payload === "GET_STARTED_PAYLOAD") {
         request({
-            url: "https://graph.facebook.com/v2.6" + senderID,
-            qs: {
-                access_token: conf.PROFILE_TOKEN,
-        fields: "first_name"
-    },
-        method: "GET"
-    },
-        function (error, response, body) {
-            var greeting = "";
-            if (error) {
-                console.log("Error getting username " + error);
-            }
-            else {
-                var bodyObj = JSON.parse(body);
-                name = bodyObj.first_name;
-                greeting = "Hey, " + name + ".";
-            }
-            var message = greeting + "Shoppingo helps you find the best deals on your favourite prouducts while shopping online!";
-            sendMessage(senderID, {text: message});
-        });
+                url: "https://graph.facebook.com/v2.6" + senderID,
+                qs: {
+                    access_token: conf.PROFILE_TOKEN,
+                    fields: "first_name"
+                },
+                method: "GET"
+            },
+            function (error, response, body) {
+                var greeting = "";
+                if (error) {
+                    console.log("Error getting username " + error);
+                }
+                else {
+                    var bodyObj = JSON.parse(body);
+                    var name = bodyObj.first_name;
+                    if (name) {
+                        greeting = "Hey, " + name + ".";
+                    }
+                    else {
+                        greeting = "Hey!";
+                    }
+
+                }
+                var message = greeting + "Shoppingo helps you find the best deals on your favourite prouducts while shopping online!";
+                sendMessage(senderID, {text: message});
+            });
     }
-    else
-    {
+    else if (payload === "DOTD_PAYLOAD") {
+        getDOTD(senderID);
+
+    }
+    else {
         console.log("Received postback for user %d and page %d with payload '%s'", senderID, recipientID, payload);
 
         // When a postback is called, we'll send a message back to the sender to
         // let them know it was successful
         sendMessage(senderID, "Postback called");
     }
-
-
 }
-httpServer.listen(conf.PORT, function () {
-    console.log("Express http server listening on port " + conf.PORT);
+
+    function getDOTD(recipientID)
+    {
+        request({
+            url: "https://pinguapi.xyz/dotdSD",
+            method: "GET"
+        },
+            function(error, response, body)
+            {
+                if(error)
+                {
+                    console.log("Error getting DOTD");
+                }
+                else
+                {
+                    var DOTDResult = JSON.parse(body);
+                    var message = [];
+                    message =
+                        {
+                            attachment: {
+                                type: "template",
+                                payload: {
+                                    template_type: "generic",
+                                    elements: [{
+                                        title: DOTDResult.title,
+                                        subtitle: DOTDResult.offerPrice,
+                                        image_url: DOTDResult.imageLink,
+                                        buttons: [{
+                                            type: "web_url",
+                                            url: DOTDResult.link,
+                                            title: "View Product"
+                                        }],
+                                    }]
+                                }
+                            }
+                        };
+                    sendMessage(recipientID, message);
+                }
+            });
+        }
+
+var port;
+port = process.env.PORT || 3000;
+httpServer.listen(port, function () {
+    console.log("Express http server listening on port " + port);
 });
+
