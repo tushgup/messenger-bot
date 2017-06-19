@@ -213,7 +213,6 @@ function receivedPostback(event) {
                 {
 
                     var DOTDResult = JSON.parse(body);
-                    console.log(DOTDResult[1]);
                     var message =
                         {
                             attachment: {
@@ -221,12 +220,12 @@ function receivedPostback(event) {
                                 payload: {
                                     template_type: "generic",
                                     elements: [{
-                                        title: DOTDResult.title,
-                                        subtitle: DOTDResult.offerPrice,
-                                        image_url: DOTDResult.imageLink,
+                                        title: DOTDResult.products[0].title,
+                                        subtitle: DOTDResult.products[0].offerPrice,
+                                        image_url: DOTDResult.products[0].imageLink,
                                         buttons: [{
                                             type: "web_url",
-                                            url: DOTDResult.link,
+                                            url: DOTDResult.products[0].link,
                                             title: "View Product"
                                         }],
                                     }]
