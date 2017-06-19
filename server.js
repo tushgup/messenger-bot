@@ -213,7 +213,7 @@ function receivedPostback(event) {
                 {
 
                     var DOTDResult = JSON.parse(body);
-                    console.log(DOTDResult);
+                    console.log(DOTDResult[1]);
                     var message =
                         {
                             attachment: {
