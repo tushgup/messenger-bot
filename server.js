@@ -238,7 +238,7 @@ function receivedPostback(event) {
 
                         buttonArray.push(button);
 
-                        singleProduct.buttons = buttonArray;
+                        //singleProduct.buttons = buttonArray;
                         arrayOfProducts.push(singleProduct);
                         console.log(singleProduct);
                     }
